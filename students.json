@@ -1,8 +1,8 @@
 [
   {
-    "name"  : "Your Name", "email" : "student email", "pid" : "your id",
-    "name"  : "Your Name", "email" : "student email", "pid" : "your id",
-    "name"  : "Your Name", "email" : "student email", "pid" : "your id",
-    "name"  : "Your Name", "email" : "student email", "pid" : "your id",
+    "name"  : "Aarjav Kothari", "email" : "aakothar@ucsd.edu", "pid" : "A91087718",
+    "name"  : "Shrivatsan Rajagopalan", "email" : "s1rajago@eng.ucsd.edu", "pid" : "A53245201",
+    "name"  : "Ruochao Yan", "email" : "ruy007@ucsd.edu", "pid" : "A53247716",
+    "name"  : "Alan Yessenbayev", "email" : "ayessenb@ucsd.edu", "pid" : "A92411003"
   }
 ]
