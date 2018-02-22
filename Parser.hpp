@@ -2,6 +2,7 @@
 #define PARSER_HPP_INCLUDED
 #include <set>
 #include <string>
+#include <iostream>
 
 class Parser {
 public:
