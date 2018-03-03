@@ -1,0 +1,20 @@
+We take blocks of size s bytes. ..or bits, whatever is better
+We will start counting blocks from the index 0
+The start of the directory is always in the block 0
+Imagine we have 10 blocks in use. s = 100
+Block 0 is the directory.
+Block 1-9 is the first file named first.txt with size 850 bytes.
+Then the directory should look like this (line numbers for clarity.)
+
+1. 0 //blocks of the directory omitting [] for parsing simplicity
+2. "first.txt" txt 850 1,2,3,4,5,6,7,8,9 //filename, type, size, block_order
+
+Then we add 50 byte file called second.png. Imagine that we discover that
+there is not enough space for the directory. (this won't be the case for this example
+but imagine it is). Then we append one more block for the directory (10) and one more for
+the "second.png" file (11). The directory file then should look like this. We write it
+to the blocks 0 and 10.
+
+1. 0,10 // use getline(ss,s,',')
+2. "first.txt" txt 850 1,2,3,4,5,6,7,8,9 //use getline(ss,s,' ') and then getline(ss,s,',') on the last one
+3. "second.png" png 50 11
