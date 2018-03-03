@@ -18,8 +18,8 @@ class file_entry{
 };
 
 class repo{
-    std::vector files;
+    std::vector<block> files;
     size_t size; //size in blocks
-    std::vector emptyblocks;
+    std::vector<block> emptyblocks;
 };
 #endif // ARCHIVE_HPP_INCLUDED
