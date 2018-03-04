@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include "Archive.hpp"
 
 class Parser {
 public:
