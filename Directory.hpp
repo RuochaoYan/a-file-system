@@ -3,6 +3,9 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <sstream>
+#include <fstream>
+
     struct FileEntry{
         std::string filename;
         std::string filetype;
@@ -12,8 +15,7 @@
 
   class Directory{
   public:
-    Directory(std::ifstream archive); //if the archive already exists
-    Directory(std::ofstream archive); //if the archive never existed
+    Directory(std::string name);
 
   protected:
     std::map<std::string,FileEntry> files; //Maps filename to the corresponding FileEntry object

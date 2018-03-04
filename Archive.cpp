@@ -1,8 +1,5 @@
 #include "Archive.hpp"
 
 Archive::Archive(std::string name){
-    std::ifstream archive(name);
-    if (archive.fail()){
-        std::ofstream archive(name);
-    }
+    dir = std::unique_ptr<Directory>(new Directory(name));
 }

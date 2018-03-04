@@ -1,6 +1,5 @@
 #ifndef ARCHIVE_HPP_INCLUDED
 #define ARCHIVE_HPP_INCLUDED
-#include <fstream>
 #include <memory>
 #include "Directory.hpp"
 
@@ -23,6 +22,6 @@ public:
     Archive& extract(std::string filename);
 
 protected:
-    std::unique_ptr<Directory> dir = nullptr;
+    std::unique_ptr<Directory> dir;
 };
 #endif // ARCHIVE_HPP_INCLUDED
