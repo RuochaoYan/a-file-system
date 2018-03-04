@@ -7,6 +7,7 @@ Archive::Archive(std::string aName){
 Archive& Archive::add(std::string aFilename){
     std::ifstream filetoAdd(aFilename,std::ifstream::ate|std::ifstream::binary);
     size_t fileSize=filetoAdd.tellg();
-    dir->append(aFilename,fileSize,Blocks);
+        dir->append(aFilename,fileSize,blocks);
     return *this;
 }
+

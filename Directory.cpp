@@ -9,7 +9,7 @@ FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std:
     std::stringstream ss(aFilename);
     std::string s;
     int i = 0;
-    while(getline(ss,s,',')){
+    while(getline(ss,s,'.')){
         if (i==1) filetype=s;
         i++;
     }
@@ -24,9 +24,9 @@ FileEntry::FileEntry(const std::string aLine){
     }
     filename = words[0];
     filetype = words[1];
-    size = std::stoi(words[2]);
+    size = std::stoll(words[2]);
     std::stringstream sss(words[3]);
-    while(getline(sss,s,',')) blocks.push_back(std::stoi(s));
+    while(getline(sss,s,',')) blocks.push_back(std::stoll(s));
 }
 
 
@@ -51,10 +51,11 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
     else{ //if the archive already exists
         int i = 0;
         while(getline(archive,s)){
-            if (i==0){size=std::stoi(s); i++;}
-            if (i==1){
+           if (i==0){size=std::stoll(s); i++;} //first line: size of directory in blocks
+            else if (i==1){ //second line: size of empty blocks
                 std::stringstream ss(s);
-                while(getline(ss,s1,',')) emptyblocks.push_back(std::stoi(s1));
+                while(getline(ss,s1,',')) emptyblocks.push_back(std::stoll(s1));
+                i++;
             }
             else{
                 FileEntry f = FileEntry(s);
