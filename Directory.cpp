@@ -39,7 +39,7 @@ std::ostream& operator<<(std::ostream &os, const FileEntry& aF){
     return os;
 }
 
-Directory::Directory(const std::string aName):arcname(aName){
+Directory::Directory(const std::string aName):arcname(aName+".arc"){
     std::string s, s1;
     std::ifstream archive(arcname);
     if (archive.fail()){ //if the archive does not exist set default values
