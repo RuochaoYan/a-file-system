@@ -14,5 +14,5 @@ Then we add 50 byte file called second.png. Imagine that we also delete first.tx
 
 1. 1 // use getline(ss,s,',')
 2. 1,2,3,4,5,6,7,8,9 // 1-9 are empty
-3. "first.txt" txt 850 1,2,3,4,5,6,7,8,9 //use getline(ss,s,' ') and then getline(ss,s,',') on the last one
-4. "second.png" png 50 11
+3. first.txt txt 850 1,2,3,4,5,6,7,8,9 //use getline(ss,s,' ') and then getline(ss,s,',') on the last one
+4. second.png png 50 11
