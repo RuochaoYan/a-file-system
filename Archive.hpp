@@ -23,5 +23,7 @@ public:
 
 protected:
     std::unique_ptr<Directory> dir;
+    std::vector<size_t> Blocks;
 };
 #endif // ARCHIVE_HPP_INCLUDED
+    

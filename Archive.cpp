@@ -5,7 +5,14 @@ Archive::Archive(std::string aName){
 }
 
 Archive& Archive::add(std::string aFilename){
-    std::vector<size_t> pizda = {1,2,3,4,5};
-    dir->append(aFilename,3,pizda);
+    std::fstream filetoAdd(aFilename,std::fstream::ate|std::fstream::binary);
+    size_t fileSize=filetoAdd.tellg();
+    dir->append(aFilename,fileSize,Blocks);
     return *this;
 }
+
+/*Archive& Archive::add(std::string filename)
+{
+	//std::fstream file=
+	return *this;
+}*/
