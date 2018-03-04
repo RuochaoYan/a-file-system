@@ -8,9 +8,8 @@
 class Parser {
 public:
     Parser();
-    //~Parser();
 
-    void parse(int argc, char *argv[]); //I don't know what it should return yet
+    void parse(int argc, char *argv[]);
 
 protected:
     std::set<std::string> commands;
