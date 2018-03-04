@@ -11,14 +11,25 @@
         std::string filename;
         std::string filetype;
         size_t size;
-        size_t firstblock;
+        std::vector<size_t> blocks;
+
+        FileEntry();
+        FileEntry(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks);
+        FileEntry(const std::string aLine);
+
     };
+
+    std::ostream& operator<<(std::ostream &os,const FileEntry& aF);
 
   class Directory{
   public:
-    Directory(std::string name);
+    Directory(const std::string aName);
+    ~Directory();
+
+    Directory& append(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks);
 
   protected:
+    std::string arcname;
     std::map<std::string,FileEntry> files; //Maps filename to the corresponding FileEntry object
     std::vector<size_t> emptyblocks; // a vector of empty block indices
     size_t size; //size in blocks
