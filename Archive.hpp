@@ -6,8 +6,8 @@
 
   struct Block{
     Block(size_t num, size_t next=0);
-    size_t num = 0;
-    size_t next = 0; //the number of the next block, 0 if no next block
+    size_t num;
+    size_t next; //the number of the next block, 0 if no next block
     size_t size = 1024; // 1kByte blocks for now
   };
 
