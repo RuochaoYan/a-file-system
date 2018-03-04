@@ -9,6 +9,7 @@
     size_t size = 1024; // 1kByte blocks for now
 
     size_t startPos() {return num*size;} //returns the position where the file needs to be written
+    size_t endPos() {return startPos() + size;}
   };
 
 class Archive{

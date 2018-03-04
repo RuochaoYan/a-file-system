@@ -26,6 +26,7 @@ struct Block;
 
   class Directory{
   public:
+    Directory();
     Directory(const std::string aName);
     void writeDir();
 
@@ -35,6 +36,8 @@ struct Block;
 
     size_t getSize(){return size;}
     FileEntry getFileEntry(std::string filename){return files[filename];}
+
+    friend std::ostream& operator<<(std::ostream &os,Directory& aDir);
 
   protected:
     std::string arcname;

@@ -40,6 +40,8 @@ std::ostream& operator<<(std::ostream &os, const FileEntry& aF){
     return os;
 }
 
+Directory::Directory(){}
+
 Directory::Directory(const std::string aName):arcname(aName+".arc"){
     std::string s, s1;
     std::ifstream archive(arcname);
@@ -53,30 +55,17 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
         int i = 0;
         while(getline(archive,s)){
             if (i==0){size=std::stoll(s); i++;} //first line: size of directory in blocks
-            else if (i==1){ //second line: size of empty blocks
+            else if (i==1){ //second line: vector of empty blocks
                 std::stringstream ss(s);
                 while(getline(ss,s1,',')) emptyblocks.push_back(std::stoll(s1));
                 i++;
             }
+            else if("EOF"==s) break;
             else{
                 FileEntry f = FileEntry(s);
                 files[f.filename] = f;
             }
         }
-    }
-}
-
-void Directory::writeDir(){
-    std::string s, s1;
-    std::ofstream archive(arcname);
-    archive << size << std::endl;
-    for(size_t i = 0; i < emptyblocks.size(); ++i){
-    if(i != 0) archive << ",";
-    archive << emptyblocks[i];
-    }
-    archive << std::endl;
-    for (std::map<std::string,FileEntry>::iterator it=files.begin(); it!=files.end(); ++it){
-        archive << it->second << std::endl;
     }
 }
 
@@ -89,5 +78,20 @@ Directory& Directory::append(const std::string aFilename, const size_t aSize, co
 Directory& Directory::extractFile(const std::string filename)
 {
     return *this;
+}
+
+std::ostream& operator<<(std::ostream &os,Directory& aDir){
+    std::string s, s1;
+    os << aDir.size << '\n';
+    for(size_t i = 0; i < aDir.emptyblocks.size(); ++i){
+    if(i != 0) os << ",";
+    os << aDir.emptyblocks[i];
+    }
+    os << '\n';
+    for (std::map<std::string,FileEntry>::iterator it=aDir.files.begin(); it!=aDir.files.end(); ++it){
+        os << it->second << '\n';
+    }
+    os << "EOF" << std::endl;
+    return os;
 }
 

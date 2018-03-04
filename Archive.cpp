@@ -16,16 +16,15 @@ Archive& Archive::add(std::string aFilename){
     for(size_t i=1; i<=blocknum; ++i) blocks.push_back(Block(i)); //trivially choosing successive blocks SHOULD BE MORE INTELLIGENT!!!
     std::cout << "First Block:" << blocks[0].num << std::endl;
     dir->append(aFilename,fileSize,blocks); //passing blocks to dir
-    dir->writeDir();
 
-    std::ofstream archivefile(arcname,std::ios::binary);
+    std::ofstream archivefile(arcname/*,std::ios::binary*/);
     std::cout << "Startpos: " << blocks[0].startPos() << std::endl;
-    archivefile.seekp(blocks[0].startPos(),std::ios::beg);
+    archivefile << *dir;
+    archivefile.seekp(blocks[0].startPos());
     while(filetoAdd.good())
     {
     	archivefile.put(filetoAdd.get());
     }
-
     return *this;
 }
 
@@ -40,8 +39,6 @@ Archive& Archive::extract(std::string filename)
 	{
 		std::cout<<content<<std::endl;
 	}
-
-	dir->extractFile(filename);
 
 	return *this;
 
