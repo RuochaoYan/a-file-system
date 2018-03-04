@@ -10,6 +10,7 @@
     struct FileEntry{
         std::string filename;
         std::string filetype;
+        
         size_t size;
         std::vector<size_t> blocks;
 
@@ -25,6 +26,8 @@
   public:
     Directory(const std::string aName);
     ~Directory();
+
+    Directory& extractFile(const std::string filename);
 
     Directory& append(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks);
 

@@ -11,3 +11,12 @@ Archive& Archive::add(std::string aFilename){
     return *this;
 }
 
+
+
+Archive& Archive::extract(std::string filename)
+{
+	 dir->extractFile(filename);
+
+	return *this;
+
+}

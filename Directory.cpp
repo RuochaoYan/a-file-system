@@ -51,7 +51,7 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
     else{ //if the archive already exists
         int i = 0;
         while(getline(archive,s)){
-           if (i==0){size=std::stoll(s); i++;} //first line: size of directory in blocks
+            if (i==0){size=std::stoll(s); i++;} //first line: size of directory in blocks
             else if (i==1){ //second line: size of empty blocks
                 std::stringstream ss(s);
                 while(getline(ss,s1,',')) emptyblocks.push_back(std::stoll(s1));
@@ -81,7 +81,25 @@ Directory::~Directory(){
 
 Directory& Directory::append(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks){
     FileEntry f = FileEntry(aFilename,aSize,aBlocks);
+    std::ifstream filetoAdd(aFilename,std::ios::binary);
+    std::ofstream archivefile(f.filename,std::ios::binary);
+    while(filetoAdd.good())
+    {
+    	archivefile.put(filetoAdd.get());
+    }
     files[f.filename] = f;
     return *this;
+}
+
+Directory& Directory::extractFile(const std::string filename)
+{
+	std::string content;
+	FileEntry f=files[filename];
+	std::ifstream filetoPrint(f.filename);
+	while(getline(filetoPrint,content))
+	{
+		std::cout<<content<<std::endl;
+	}
+return *this;
 }
 
