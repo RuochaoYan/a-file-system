@@ -5,14 +5,8 @@ Archive::Archive(std::string aName){
 }
 
 Archive& Archive::add(std::string aFilename){
-    std::fstream filetoAdd(aFilename,std::fstream::ate|std::fstream::binary);
+    std::ifstream filetoAdd(aFilename,std::ifstream::ate|std::ifstream::binary);
     size_t fileSize=filetoAdd.tellg();
     dir->append(aFilename,fileSize,Blocks);
     return *this;
 }
-
-/*Archive& Archive::add(std::string filename)
-{
-	//std::fstream file=
-	return *this;
-}*/
