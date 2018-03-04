@@ -1,11 +1,12 @@
 #include "Directory.hpp"
+#include "Archive.hpp"
 
 FileEntry::FileEntry(){}
 
-FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks){
+FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     filename = aFilename;
     size = aSize;
-    blocks = aBlocks;
+    for(size_t i = 0; i<aBlocks.size(); ++i) {std::cout << aBlocks[i].num << std::endl; blocks.push_back(aBlocks[i].num);}
     std::stringstream ss(aFilename);
     std::string s;
     int i = 0;
@@ -65,7 +66,7 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
     }
 }
 
-Directory::~Directory(){
+void Directory::writeDir(){
     std::string s, s1;
     std::ofstream archive(arcname);
     archive << size << std::endl;
@@ -79,27 +80,14 @@ Directory::~Directory(){
     }
 }
 
-Directory& Directory::append(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks){
+Directory& Directory::append(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     FileEntry f = FileEntry(aFilename,aSize,aBlocks);
-    std::ifstream filetoAdd(aFilename,std::ios::binary);
-    std::ofstream archivefile(f.filename,std::ios::binary);
-    while(filetoAdd.good())
-    {
-    	archivefile.put(filetoAdd.get());
-    }
     files[f.filename] = f;
     return *this;
 }
 
 Directory& Directory::extractFile(const std::string filename)
 {
-	std::string content;
-	FileEntry f=files[filename];
-	std::ifstream filetoPrint(f.filename);
-	while(getline(filetoPrint,content))
-	{
-		std::cout<<content<<std::endl;
-	}
-return *this;
+    return *this;
 }
 

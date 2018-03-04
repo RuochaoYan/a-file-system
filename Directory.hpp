@@ -7,15 +7,17 @@
 #include <sstream>
 #include <fstream>
 
+struct Block;
+
     struct FileEntry{
         std::string filename;
         std::string filetype;
-        
+
         size_t size;
         std::vector<size_t> blocks;
 
         FileEntry();
-        FileEntry(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks);
+        FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks);
         FileEntry(const std::string aLine);
 
     };
@@ -25,11 +27,14 @@
   class Directory{
   public:
     Directory(const std::string aName);
-    ~Directory();
+    void writeDir();
 
     Directory& extractFile(const std::string filename);
 
-    Directory& append(const std::string aFilename, const size_t aSize, const std::vector<size_t> aBlocks);
+    Directory& append(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks);
+
+    size_t getSize(){return size;}
+    FileEntry getFileEntry(std::string filename){return files[filename];}
 
   protected:
     std::string arcname;
