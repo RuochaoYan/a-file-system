@@ -6,11 +6,12 @@ FileEntry::FileEntry(){}
 FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     filename = aFilename;
     size = aSize;
+    std::cout << "Blocks occupied: ";
     for(size_t i = 0; i<aBlocks.size(); ++i) {
-        std::cout << aBlocks[i].num << std::endl;
+        std::cout << aBlocks[i].num << " ";
         blocks.push_back(aBlocks[i].num);
-        
     }
+    std::cout << "" << std::endl;
     std::stringstream ss(aFilename);
     std::string s;
     int i = 0;
@@ -116,8 +117,12 @@ void Directory::deleteAFile(std::string filename){
 
 void Directory::listAllFiles(){
     for (std::map<std::string,FileEntry>::iterator it=files.begin(); it!=files.end(); ++it){
-        std::cout << it->first << std::endl;
+        std::cout << it->first << " " << it->second.size << "Bytes" << std::endl;
     }
+}
+
+void Directory::listOneFile(std::string aFilename){
+    std::cout << aFilename << " " << files[aFilename].size << "Bytes" << std::endl;
 }
 
 std::ostream& operator<<(std::ostream &os,Directory& aDir){

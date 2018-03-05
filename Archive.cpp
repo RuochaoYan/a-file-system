@@ -9,9 +9,12 @@ Archive::Archive(std::string aName): arcname(aName+".arc"){
 }
 
 Archive& Archive::add(std::string aFilename){
-    /*
-     need to consider filename conflict
-     */
+    // consider filename conflict
+    if(dir->contains(aFilename)){
+        std::cout << "Fail to add the file. A file with the same name already exists." << std::endl;
+        return *this;
+    }
+    
     std::vector<Block> blocks; //vector of block number
     std::ifstream filetoAdd(aFilename,std::ifstream::ate|std::ifstream::binary);
     size_t fileSize=filetoAdd.tellg();
@@ -26,7 +29,6 @@ Archive& Archive::add(std::string aFilename){
             Block lastBlock(lastBlockIndex);
             blocks.push_back(lastBlock);
         }
-        //blocks.push_back(Block(i)); //trivially choosing successive blocks SHOULD BE MORE INTELLIGENT!!!
     }
     std::cout << "First Block:" << blocks[0].num << std::endl;
     dir->append(aFilename,fileSize,blocks); //passing blocks to dir
@@ -42,17 +44,15 @@ Archive& Archive::add(std::string aFilename){
     {
     	archivefile.put(filetoAdd.get());
     }
-    // how to mark the end of the file?
+    std::cout << "Successfully added!" << std::endl;
     return *this;
 }
 
 Archive& Archive::del(std::string filename){
-    // we don't really delete contents in those blocks. we just mark them as illegal (emptyblocks)
-    // but the remaining contents might disturb when we reuse the block with shorter length of contents
-    // so we need to make a mark at the end of every file?
     dir->deleteAFile(filename);
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
     archivefile << *dir;
+    std::cout << "Successfully deleted!" << std::endl;
     return *this;
 }
 
@@ -63,6 +63,11 @@ Archive& Archive::listall(){
 
 Archive& Archive::list(std::string filename){
     // we should add a date-added property to files first
+    if(dir->contains(filename)){
+        dir->listOneFile(filename);
+    }
+    else
+        std::cout << "File not found" << std::endl;
     return *this;
 }
 

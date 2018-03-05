@@ -43,6 +43,8 @@ struct Block;
       void addAnEmptyBlock(size_t aBlock){emptyblocks.push(aBlock);}
       void deleteAFile(std::string filename);
       void listAllFiles();
+      void listOneFile(std::string aFilename);
+      bool contains(std::string filename){return files.count(filename) == 1;}
       
     friend std::ostream& operator<<(std::ostream &os,Directory& aDir);
       size_t lastBlock; // the maximal index of blocks in the archive

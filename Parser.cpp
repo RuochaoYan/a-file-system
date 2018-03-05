@@ -32,7 +32,8 @@ void Parser::parse(int argc, char *argv[]){
                     arc.listall();
                 }
                 else if(argc == 4 && ("list"==command || "-l" == command)){
-                    
+                    std::string fileList = std::string(argv[3]);
+                    arc.list(fileList);
                 }
                 else if("extract"==command)
                 {
