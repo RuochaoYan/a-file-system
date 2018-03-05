@@ -90,7 +90,14 @@ Directory& Directory::append(const std::string aFilename, const size_t aSize, co
 
 Directory& Directory::extractFile(const std::string filename)
 {
-    return *this;
+    std::string content;
+    FileEntry f=files[filename];
+    std::ifstream filetoPrint(f.filename);
+    while(getline(filetoPrint,content))
+    {
+       std::cout<<content<<std::endl;
+   }
+ return *this;
 }
 
 size_t Directory::getAnEmptyBlock(){
