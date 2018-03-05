@@ -6,12 +6,16 @@ FileEntry::FileEntry(){}
 FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     filename = aFilename;
     size = aSize;
-    for(size_t i = 0; i<aBlocks.size(); ++i) {std::cout << aBlocks[i].num << std::endl; blocks.push_back(aBlocks[i].num);}
+    for(size_t i = 0; i<aBlocks.size(); ++i) {
+        std::cout << aBlocks[i].num << std::endl;
+        blocks.push_back(aBlocks[i].num);
+        
+    }
     std::stringstream ss(aFilename);
     std::string s;
     int i = 0;
     while(getline(ss,s,'.')){
-        if (i==1) filetype=s;
+        if (i==2) filetype=s; // choose the part after the second "." cuz the first "." is for relative address
         i++;
     }
 }
@@ -47,23 +51,32 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
     std::ifstream archive(arcname);
     if (archive.fail()){ //if the archive does not exist set default values
             std::cout << "No archive named "+ arcname + " yet\nCreating new archive" << std::endl;
+        std::ofstream newArchive(arcname); // create a new archive
             files = {};
             emptyblocks = {};
             size = 1; //at least the first block is already occupied
+            lastBlock = 0; // the first block
     }
     else{ //if the archive already exists
         int i = 0;
         while(getline(archive,s)){
-            if (i==0){size=std::stoll(s); i++;} //first line: size of directory in blocks
+            if (i==0){
+                size=std::stoll(s);
+                i++;
+                lastBlock = std::max(lastBlock, size-1);
+            } //first line: size of directory in blocks
             else if (i==1){ //second line: vector of empty blocks
                 std::stringstream ss(s);
-                while(getline(ss,s1,',')) emptyblocks.push_back(std::stoll(s1));
+                while(getline(ss,s1,',')) emptyblocks.push(std::stoll(s1));
                 i++;
             }
             else if("EOF"==s) break;
             else{
                 FileEntry f = FileEntry(s);
                 files[f.filename] = f;
+                for(size_t i : f.blocks){
+                    lastBlock = std::max(lastBlock, i); // achieve the maximal index of blocks
+                }
             }
         }
     }
@@ -80,12 +93,33 @@ Directory& Directory::extractFile(const std::string filename)
     return *this;
 }
 
+size_t Directory::getAnEmptyBlock(){
+    size_t res = emptyblocks.front();
+    emptyblocks.pop();
+    return res;
+}
+
+void Directory::deleteAFile(std::string filename){
+    FileEntry f=getFileEntry(filename);
+    for(size_t block : f.blocks){ // add this file's blocks to emptyblocks
+        addAnEmptyBlock(block);
+    }
+    files.erase(filename);
+}
+
+void Directory::listAllFiles(){
+    for (std::map<std::string,FileEntry>::iterator it=files.begin(); it!=files.end(); ++it){
+        std::cout << it->first << std::endl;
+    }
+}
+
 std::ostream& operator<<(std::ostream &os,Directory& aDir){
     std::string s, s1;
     os << aDir.size << '\n';
-    for(size_t i = 0; i < aDir.emptyblocks.size(); ++i){
+    for(size_t i = 0; !aDir.emptyblocks.empty(); ++i){
     if(i != 0) os << ",";
-    os << aDir.emptyblocks[i];
+        os << aDir.emptyblocks.front();
+        aDir.emptyblocks.pop();
     }
     os << '\n';
     for (std::map<std::string,FileEntry>::iterator it=aDir.files.begin(); it!=aDir.files.end(); ++it){

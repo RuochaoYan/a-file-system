@@ -24,6 +24,16 @@ void Parser::parse(int argc, char *argv[]){
         else if ((argc==3 && ("list"==command || "-l" == command))  || argc==4){
                 Archive arc = Archive(std::string(argv[2]));
                 if("add"==command) arc.add(std::string(argv[3]));
+                else if("del"==command){
+                    std::string fileDelete=std::string(argv[3]);
+                    arc.del(fileDelete);
+                }
+                else if(argc == 3 && ("list"==command || "-l" == command)){
+                    arc.listall();
+                }
+                else if(argc == 4 && ("list"==command || "-l" == command)){
+                    
+                }
                 else if("extract"==command)
                 {
                     
