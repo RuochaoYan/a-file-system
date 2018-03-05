@@ -23,7 +23,8 @@ Archive& Archive::add(std::string aFilename){
         }
         else{ // append to the end of the archive
             lastBlockIndex++;
-            blocks.push_back(Block(lastBlockIndex));
+            Block lastBlock(lastBlockIndex);
+            blocks.push_back(lastBlock);
         }
         //blocks.push_back(Block(i)); //trivially choosing successive blocks SHOULD BE MORE INTELLIGENT!!!
     }
@@ -80,19 +81,23 @@ Archive& Archive::extract(std::string filename)
         Block block(blockIndex);
         archive.seekg(block.startPos()); // move the file pointer to the beigining of this block
         if(f.filetype == "txt"){ // it is a text file
-            std::string s;
-            while(getline(archive,s)){
-                std::cout << s << std::endl;
+            char x[1];
+            int i = 0;
+            while(archive.peek() != EOF && archive.peek() != 0xff && i < 1024) // 0xff is the EOF we stored in the archive
+            {
+                archive.read(x,1);
+                std::cout << x;
+                i ++;
             }
-            // how to handle it when the file pointer reached the end of the block?
         }
         else{ // it is a binary file
             int i = 0;
-            while(archive.good() && i < 1024){ // print the contents in this block
-                std::cout << archive.get() << std::endl;
+            while(archive.peek() != EOF && archive.peek() != 0xff && i < 1024){ // print the contents in this block
+                std::cout << archive.get() ;
                 i++;
             }
         }
+        std::cout << "" << std::endl;
     }
 	return *this;
 }
