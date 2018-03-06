@@ -1,5 +1,14 @@
 #include "Archive.hpp"
 
+// discard the address, only maintain the name of the file e.g. "./testfiles/test1.txt" -> "test1.txt"
+std::string parseFilename(std::string aFileAddress){
+    std::stringstream ss(aFileAddress);
+    std::string s;
+    while(getline(ss,s,'/')){
+    }
+    return s;
+}
+
 Archive::Archive(std::string aName): arcname(aName+".arc"){
     dir = std::unique_ptr<Directory>(new Directory(aName));
     for(size_t i = 0; i<(dir->getSize()); ++i){
@@ -8,15 +17,17 @@ Archive::Archive(std::string aName): arcname(aName+".arc"){
     lastBlockIndex = dir->lastBlock;
 }
 
-Archive& Archive::add(std::string aFilename){
+Archive& Archive::add(std::string aFileAddress){
+    std::string theFilename = parseFilename(aFileAddress);
+    
     // consider filename conflict
-    if(dir->contains(aFilename)){
+    if(dir->contains(theFilename)){
         std::cout << "Fail to add the file. A file with the same name already exists." << std::endl;
         return *this;
     }
     
     std::vector<Block> blocks; //vector of block number
-    std::ifstream filetoAdd(aFilename,std::ifstream::ate|std::ifstream::binary);
+    std::ifstream filetoAdd(aFileAddress,std::ifstream::ate|std::ifstream::binary);
     size_t fileSize=filetoAdd.tellg();
     size_t blocknum = fileSize/1024 + 1; //number of blocks needed
     std::cout << "Filesize:" << fileSize <<  "\nNumber of Blocks: " << blocknum << std::endl;
@@ -31,7 +42,7 @@ Archive& Archive::add(std::string aFilename){
         }
     }
     std::cout << "First Block:" << blocks[0].num << std::endl;
-    dir->append(aFilename,fileSize,blocks); //passing blocks to dir
+    dir->append(theFilename,fileSize,blocks); //passing blocks to dir
     
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
 
@@ -48,8 +59,9 @@ Archive& Archive::add(std::string aFilename){
     return *this;
 }
 
-Archive& Archive::del(std::string filename){
-    dir->deleteAFile(filename);
+Archive& Archive::del(std::string aFilename){
+    std::string theFilename = parseFilename(aFilename);
+    dir->deleteAFile(theFilename);
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
     archivefile << *dir;
     std::cout << "Successfully deleted!" << std::endl;
@@ -61,10 +73,11 @@ Archive& Archive::listall(){
     return *this;
 }
 
-Archive& Archive::list(std::string filename){
+Archive& Archive::list(std::string aFilename){
+    std::string theFilename = parseFilename(aFilename);
     // we should add a date-added property to files first
-    if(dir->contains(filename)){
-        dir->listOneFile(filename);
+    if(dir->contains(theFilename)){
+        dir->listOneFile(theFilename);
     }
     else
         std::cout << "File not found" << std::endl;
@@ -76,11 +89,17 @@ Archive& Archive::find(std::string aString){
     return *this;
 }
 
-Archive& Archive::extract(std::string filename)
+Archive& Archive::extract(std::string aFilename)
 {
+    std::string theFilename = parseFilename(aFilename);
+    // handle file not found
+    if(!dir->contains(theFilename)){
+        std::cout << "File not found." << std::endl;
+        return *this;
+    }
+    
     std::string content;
-    // should handle file not found
-    FileEntry f=dir->getFileEntry(filename);
+    FileEntry f=dir->getFileEntry(theFilename);
     std::ifstream archive(arcname, std::ifstream::binary);
     for(size_t blockIndex : f.blocks){ // for every block of this file
         Block block(blockIndex);

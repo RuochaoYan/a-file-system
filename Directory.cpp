@@ -16,7 +16,7 @@ FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std:
     std::string s;
     int i = 0;
     while(getline(ss,s,'.')){
-        if (i==2) filetype=s; // choose the part after the second "." cuz the first "." is for relative address
+        if (i==1) filetype=s; // choose the part after the second "." cuz the first "." is for relative address
         i++;
     }
 }
