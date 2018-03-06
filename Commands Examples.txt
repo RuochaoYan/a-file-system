@@ -1,0 +1,39 @@
+1. Add file to Archive
+add (archive) "filename" 
+
+Example:
+./sfarchiver add arc1 ./testfiles/test1.txt
+./sfarchiver add arc1 ./testfiles/google.png
+
+2. Delete file from Archive
+del (archive) "filename" 
+
+Example:
+./sfarchiver del arc1 google.png
+
+3. List files in Archive
+sfarchiver list (archive) 
+
+Example:
+./sfarchiver -l arc1
+
+sfarchiver list (archive) "filename" 
+
+Example:
+./sfarchiver -l arc1 test1.txt
+
+
+4. Find file containing "string" within Archive
+sfarchiver find (archive) "string" 
+
+Example:
+./sfarchiver find arc1 pleasure
+
+5. Extract a file from Archive
+
+Example:
+./sfarchiver extract arc1 test1.txt
+
+6. Show program version
+
+./sfarchiver -v
