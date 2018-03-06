@@ -40,8 +40,9 @@ void Parser::parse(int argc, char *argv[]){
                     std::string fileExtract=std::string(argv[3]);
                     arc.extract(fileExtract);
                 }
-                //else if("del"==command && argc==4) arc.del(argv[3]);
-                //else if(("list"==command || "-l"==command) && argc==3) arc.listall();
+                else if("find" == command){
+                    arc.find(std::string(argv[3]));
+                }
             }
         else std::cerr << "Sorry, the arguments that you input are invalid.\nPlease, run \"sfarchiver\" for help." << std::endl;
     }

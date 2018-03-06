@@ -86,6 +86,35 @@ Archive& Archive::list(std::string aFilename){
 
 Archive& Archive::find(std::string aString){
     // show properties of any textfile that contain the given string
+    std::vector<FileEntry> textFiles = dir->getAllTextFiles();
+    for(FileEntry f : textFiles){
+        findInOneFile(aString, f);
+    }
+    return *this;
+}
+
+// find if aString exists in aFile
+Archive& Archive::findInOneFile(std::string aString, FileEntry aFile){
+    std::ifstream archive(arcname, std::ifstream::binary);
+    size_t fileSize = 0;
+    std::string temp(aString.size(), ' ');
+    for(size_t blockIndex : aFile.blocks){ // for every block of this file
+        Block block(blockIndex);
+        archive.seekg(block.startPos()); // move the file pointer to the beigining of this block
+        char x[1];
+        int i = 0;
+        while(archive.peek() != EOF && fileSize < aFile.size && i < 1024){
+            archive.read(x,1);
+            temp.erase(0, 1);
+            temp.push_back(x[0]);
+            if(temp == aString){
+                dir->listOneFile(aFile.filename);
+                return *this;
+            }
+            i++;
+            fileSize++;
+        }
+    }
     return *this;
 }
 

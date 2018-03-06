@@ -21,6 +21,7 @@ public:
     Archive& list(std::string filename);
     Archive& listall();
     Archive& find(std::string aString);
+    Archive& findInOneFile(std::string aString, FileEntry aFile);
     Archive& extract(std::string filename);
 
 protected:

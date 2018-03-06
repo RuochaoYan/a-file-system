@@ -46,6 +46,7 @@ struct Block;
       void listAllFiles();
       void listOneFile(std::string aFilename);
       bool contains(std::string filename){return files.count(filename) == 1;}
+      std::vector<FileEntry> getAllTextFiles();
       
     friend std::ostream& operator<<(std::ostream &os,Directory& aDir);
       size_t lastBlock; // the maximal index of blocks in the archive

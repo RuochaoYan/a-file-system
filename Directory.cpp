@@ -137,6 +137,16 @@ void Directory::listOneFile(std::string aFilename){
     std::cout << aFilename << " " << files[aFilename].size << "Bytes" << " " << files[aFilename].dateAdded << std::endl;
 }
 
+std::vector<FileEntry> Directory::getAllTextFiles(){
+    std::vector<FileEntry> res;
+    for (std::map<std::string,FileEntry>::iterator it=files.begin(); it!=files.end(); ++it){
+        if(it->second.filetype == "txt")
+            res.push_back(it->second);
+    }
+    return res;
+}
+
+
 std::ostream& operator<<(std::ostream &os,Directory& aDir){
     std::string s, s1;
     os << aDir.size << '\n';
