@@ -66,7 +66,7 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
             std::cout << "No archive named "+ arcname + " yet\nCreating new archive" << std::endl;
         std::ofstream newArchive(arcname); // create a new archive
             files = {};
-            emptyblocks = {};
+        emptyblocks = std::queue<size_t>();
             size = 1; //at least the first block is already occupied
             lastBlock = 0; // the first block
     }
