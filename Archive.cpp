@@ -22,7 +22,7 @@ Archive& Archive::add(std::string aFileAddress){
     
     // consider filename conflict
     if(dir->contains(theFilename)){
-        std::cout << "Fail to add the file. A file with the same name already exists." << std::endl;
+        std::cout << "Failed to add the file. A file with the same name already exists." << std::endl;
         return *this;
     }
     

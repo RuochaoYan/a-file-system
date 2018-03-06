@@ -1,11 +1,21 @@
 #include "Directory.hpp"
 #include "Archive.hpp"
+#include <ctime>
 
 FileEntry::FileEntry(){}
 
 FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     filename = aFilename;
     size = aSize;
+    // record the current date
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    int year = 1900 + ltm->tm_year;
+    int month = 1 + ltm->tm_mon;
+    int day = ltm->tm_mday;
+    dateAdded = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
+    std::cout << dateAdded << std::endl;
+    
     std::cout << "Blocks occupied: ";
     for(size_t i = 0; i<aBlocks.size(); ++i) {
         std::cout << aBlocks[i].num << " ";
@@ -33,15 +43,17 @@ FileEntry::FileEntry(const std::string aLine){
     size = std::stoll(words[2]);
     std::stringstream sss(words[3]);
     while(getline(sss,s,',')) blocks.push_back(std::stoll(s));
+    dateAdded = words[4];
 }
 
 
 std::ostream& operator<<(std::ostream &os, const FileEntry& aF){
     os << aF.filename << ' ' << aF.filetype <<  ' '  << aF.size << ' ';
     for(size_t i = 0; i < aF.blocks.size(); ++i){
-    if(i != 0) os << ",";
-    os << aF.blocks[i];
-}
+        if(i != 0) os << ",";
+        os << aF.blocks[i];
+    }
+    os << ' ' << aF.dateAdded;
     return os;
 }
 
@@ -117,12 +129,12 @@ void Directory::deleteAFile(std::string filename){
 
 void Directory::listAllFiles(){
     for (std::map<std::string,FileEntry>::iterator it=files.begin(); it!=files.end(); ++it){
-        std::cout << it->first << " " << it->second.size << "Bytes" << std::endl;
+        std::cout << it->first << " " << it->second.size << "Bytes" << " " << it->second.dateAdded << std::endl;
     }
 }
 
 void Directory::listOneFile(std::string aFilename){
-    std::cout << aFilename << " " << files[aFilename].size << "Bytes" << std::endl;
+    std::cout << aFilename << " " << files[aFilename].size << "Bytes" << " " << files[aFilename].dateAdded << std::endl;
 }
 
 std::ostream& operator<<(std::ostream &os,Directory& aDir){

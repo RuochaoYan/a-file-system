@@ -37,7 +37,6 @@ void Parser::parse(int argc, char *argv[]){
                 }
                 else if("extract"==command)
                 {
-                    
                     std::string fileExtract=std::string(argv[3]);
                     arc.extract(fileExtract);
                 }

@@ -16,6 +16,7 @@ struct Block;
 
         size_t size;
         std::vector<size_t> blocks;
+        std::string dateAdded;
 
         FileEntry();
         FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks);
