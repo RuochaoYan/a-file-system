@@ -15,7 +15,7 @@ FileEntry::FileEntry(const std::string aFilename, const size_t aSize, const std:
     int day = ltm->tm_mday;
     dateAdded = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
     std::cout << dateAdded << std::endl;
-    
+
     std::cout << "Blocks occupied: ";
     for(size_t i = 0; i<aBlocks.size(); ++i) {
         std::cout << aBlocks[i].num << " ";
@@ -63,8 +63,7 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
     std::string s, s1;
     std::ifstream archive(arcname);
     if (archive.fail()){ //if the archive does not exist set default values
-            std::cout << "No archive named "+ arcname + " yet\nCreating new archive" << std::endl;
-        std::ofstream newArchive(arcname); // create a new archive
+            std::cout << "No archive named "+ arcname + " yet" << std::endl;
             files = {};
         emptyblocks = std::queue<size_t>();
             size = 1; //at least the first block is already occupied
