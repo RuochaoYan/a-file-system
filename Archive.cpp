@@ -134,7 +134,7 @@ Archive& Archive::extract(std::string aFilename)
     for(size_t blockIndex : f.blocks){ // for every block of this file
         Block block(blockIndex);
         archive.seekg(block.startPos()); // move the file pointer to the beigining of this block
-        if(f.filetype == "txt"){ // it is a text file
+//        if(f.filetype == "txt"){ // it is a text file
             char x[1];
             int i = 0;
             while(archive.peek() != EOF && fileSize < f.size && i < 1024)
@@ -144,20 +144,20 @@ Archive& Archive::extract(std::string aFilename)
                 i++;
                 fileSize++;
             }
-        }
-        else{ // it is a binary file
-            int i = 0;
-            while(archive.peek() != EOF && i < 1024 && fileSize < f.size){ // print the contents in this block
-                int num = archive.get();
-                if(num < 16)
-                    std::cout << "0";
-                std::cout << std::hex << num ;
-                i++;
-                fileSize++;
-                if(i % 2 == 0)
-                    std::cout << " " ;
-            }
-        }
+//        }
+//        else{ // for printing the binary code in binary files
+//            int i = 0;
+//            while(archive.peek() != EOF && i < 1024 && fileSize < f.size){ // print the contents in this block
+//                int num = archive.get();
+//                if(num < 16)
+//                    std::cout << "0";
+//                std::cout << std::hex << num ;
+//                i++;
+//                fileSize++;
+//                if(i % 2 == 0)
+//                    std::cout << " " ;
+//            }
+//        }
     }
     std::cout << "" << std::endl;
 	return *this;
