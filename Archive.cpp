@@ -18,14 +18,15 @@ Archive::Archive(std::string aName): arcname(aName+".arc"){
 }
 
 Archive& Archive::add(std::string aFileAddress){
+    std::cout << ("Adding file at " + aFileAddress + " to " + arcname) << std::endl;
     std::string theFilename = parseFilename(aFileAddress);
-    
+
     // consider filename conflict
     if(dir->contains(theFilename)){
         std::cout << "Failed to add the file. A file with the same name already exists." << std::endl;
         return *this;
     }
-    
+
     std::vector<Block> blocks; //vector of block number
     std::ifstream filetoAdd(aFileAddress,std::ifstream::ate|std::ifstream::binary);
     size_t fileSize=filetoAdd.tellg();
@@ -43,7 +44,7 @@ Archive& Archive::add(std::string aFileAddress){
     }
     std::cout << "First Block:" << blocks[0].num << std::endl;
     dir->append(theFilename,fileSize,blocks); //passing blocks to dir
-    
+
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
 
     std::cout << "Startpos: " << blocks[0].startPos() << std::endl;
@@ -126,7 +127,7 @@ Archive& Archive::extract(std::string aFilename)
         std::cout << "File not found." << std::endl;
         return *this;
     }
-    
+
     std::string content;
     FileEntry f=dir->getFileEntry(theFilename);
     std::ifstream archive(arcname, std::ifstream::binary);
