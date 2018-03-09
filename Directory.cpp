@@ -111,7 +111,7 @@ Directory& Directory::adjustBlockSize(){
     ss.seekp(0, std::ios::end);
     std::stringstream::pos_type dirsize = ss.tellp();
     if (dirsize >= (this->size)*1024){
-        std::fstream is(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
+        std::ifstream is(arcname);
         std::fstream os(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
         is.seekg((this->size)*1024);
         os.seekp((lastBlock+1)*1024);
