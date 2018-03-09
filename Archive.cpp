@@ -49,12 +49,17 @@ Archive& Archive::add(std::string aFileAddress){
 
     std::cout << "Startpos: " << blocks[0].startPos() << std::endl;
     archivefile << *dir;
-    archivefile.seekp(blocks[0].startPos());
+
     filetoAdd.clear();
     filetoAdd.seekg(0); // move the pointer back to the beginning
-    while(filetoAdd.good())
-    {
-    	archivefile.put(filetoAdd.get());
+    for(Block block : blocks){
+        archivefile.seekp(block.startPos());
+        int i = 0;
+        while(filetoAdd.good() && i < 1024)
+        {
+            archivefile.put(filetoAdd.get());
+            i++;
+        }
     }
     std::cout << "Successfully added!" << std::endl;
     return *this;
