@@ -9,8 +9,8 @@ std::string parseFilename(std::string aFileAddress){
     return s;
 }
 
-Archive::Archive(std::string aName): arcname(aName+".arc"){
-    dir = std::unique_ptr<Directory>(new Directory(aName));
+Archive::Archive(std::string aName, bool newArc): arcname(aName+".arc"){
+    dir = std::unique_ptr<Directory>(new Directory(aName,newArc));
     for(size_t i = 0; i<(dir->getSize()); ++i){
         Blocks.push_back(i); // i feel that the Blocks vector is not necessary here in Archive.cpp, cuz we only need to record how many blocks in total the archive occupies. the detail thing of blocks are aready stored in Directory and fileEntry.
     }
@@ -135,7 +135,7 @@ Archive& Archive::extract(std::string aFilename)
     for(size_t blockIndex : f.blocks){ // for every block of this file
         Block block(blockIndex);
         archive.seekg(block.startPos()); // move the file pointer to the beigining of this block
-//        if(f.filetype == "txt"){ // it is a text file
+        if(f.filetype == "txt"){ // it is a text file
             char x[1];
             int i = 0;
             while(archive.peek() != EOF && fileSize < f.size && i < 1024)
@@ -145,20 +145,19 @@ Archive& Archive::extract(std::string aFilename)
                 i++;
                 fileSize++;
             }
-//        }
-//        else{ // for printing the binary code in binary files
-//            int i = 0;
-//            while(archive.peek() != EOF && i < 1024 && fileSize < f.size){ // print the contents in this block
-//                int num = archive.get();
-//                if(num < 16)
-//                    std::cout << "0";
-//                std::cout << std::hex << num ;
-//                i++;
-//                fileSize++;
-//                if(i % 2 == 0)
-//                    std::cout << " " ;
-//            }
-//        }
+        }
+        else{ // for printing the binary code in binary files
+            int i = 0;
+            while(archive.peek() != EOF && i < 1024 && fileSize < f.size){ // print the contents in this block
+                int num = archive.get();
+                if(num < 16)
+                    std::cout << "0";
+                std::cout << std::hex << num ;
+                i++;
+               fileSize++;
+                if(i % 2 == 0) std::cout << " " ;
+            }
+        }
     }
     std::cout << "" << std::endl;
 	return *this;

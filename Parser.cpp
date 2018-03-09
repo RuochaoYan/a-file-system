@@ -22,9 +22,13 @@ void Parser::parse(int argc, char *argv[]){
         if (commands.find(command) == commands.end()) std::cerr << "Sorry, the command that you input is invalid.\nPlease, run \"sfarchiver\" for the list of commands." << std::endl;
         else if ("version"==command || "-v"==command) std::cout << "sfarchiver version 0.3 March 3, 2018" << std::endl;
         else if ((argc==3 && ("list"==command || "-l" == command))  || argc==4){
-                Archive arc = Archive(std::string(argv[2]));
-                if("add"==command) arc.add(std::string(argv[3]));
-                else if("del"==command){
+                if("add"==command){
+                    Archive arc = Archive(std::string(argv[2]),true);
+                    arc.add(std::string(argv[3]));
+                }
+                else{
+                    Archive arc = Archive(std::string(argv[2]));
+                if("del"==command){
                     std::string fileDelete=std::string(argv[3]);
                     arc.del(fileDelete);
                 }
@@ -42,6 +46,7 @@ void Parser::parse(int argc, char *argv[]){
                 }
                 else if("find" == command){
                     arc.find(std::string(argv[3]));
+                }
                 }
             }
         else std::cerr << "Sorry, the arguments that you input are invalid.\nPlease, run \"sfarchiver\" for help." << std::endl;

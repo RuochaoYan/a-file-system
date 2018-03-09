@@ -59,15 +59,19 @@ std::ostream& operator<<(std::ostream &os, const FileEntry& aF){
 
 Directory::Directory(){}
 
-Directory::Directory(const std::string aName):arcname(aName+".arc"){
+Directory::Directory(const std::string aName, bool newArc):arcname(aName+".arc"){
     std::string s, s1;
     std::ifstream archive(arcname);
     if (archive.fail()){ //if the archive does not exist set default values
-            std::cout << "No archive named "+ arcname + " yet" << std::endl;
+            std::cout << "No archive named "+ arcname + " yet." << std::endl;
+            if (newArc){
+            std::cout << "Creating " + arcname << std::endl;
+            std::ofstream archive(arcname);
             files = {};
-        emptyblocks = std::queue<size_t>();
+            emptyblocks = std::queue<size_t>();
             size = 1; //at least the first block is already occupied
             lastBlock = 0; // the first block
+            }
     }
     else{ //if the archive already exists
         int i = 0;
@@ -97,6 +101,16 @@ Directory::Directory(const std::string aName):arcname(aName+".arc"){
 Directory& Directory::append(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     FileEntry f = FileEntry(aFilename,aSize,aBlocks);
     files[f.filename] = f;
+    this->adjustBlockSize();
+    return *this;
+}
+
+Directory& Directory::adjustBlockSize(){
+    std::stringstream ss;
+    ss << *this;
+    ss.seekp(0, std::ios::end);
+    std::stringstream::pos_type offset = ss.tellp();
+    std::cout << "Dir Size: " << offset << std::endl;
     return *this;
 }
 

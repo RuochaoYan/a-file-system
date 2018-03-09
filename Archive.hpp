@@ -14,7 +14,7 @@
 
 class Archive{
 public:
-    Archive(std::string name);
+    Archive(std::string name, bool newArc = 0);
     //~Archive(): might not need it yet.
     Archive& add(std::string filename);
     Archive& del(std::string filename);
@@ -28,6 +28,6 @@ protected:
     std::string arcname;
     std::unique_ptr<Directory> dir;
     std::vector<Block> Blocks;
-    size_t lastBlockIndex; // indicating the largest index of blocks 
+    size_t lastBlockIndex; // indicating the largest index of blocks
 };
 #endif // ARCHIVE_HPP_INCLUDED
