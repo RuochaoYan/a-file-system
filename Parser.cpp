@@ -20,7 +20,7 @@ void Parser::parse(int argc, char *argv[]){
     else{
         std::string command = std::string(argv[1]);
         if (commands.find(command) == commands.end()) std::cerr << "Sorry, the command that you input is invalid.\nPlease, run \"sfarchiver\" for the list of commands." << std::endl;
-        else if ("version"==command || "-v"==command) std::cout << "sfarchiver version 0.3 March 3, 2018" << std::endl;
+        else if ("version"==command || "-v"==command) std::cout << "sfarchiver version 0.9 beta March 8, 2018" << std::endl;
         else if ((argc==3 && ("list"==command || "-l" == command))  || argc==4){
                 if("add"==command){
                     Archive arc = Archive(std::string(argv[2]),true);
