@@ -50,12 +50,11 @@ Archive& Archive::add(std::string aFileAddress){
     std::cout << "Startpos: " << blocks[0].startPos() << std::endl;
     archivefile << *dir;
 
-    filetoAdd.clear();
-    filetoAdd.seekg(0); // move the pointer back to the beginning
+    filetoAdd.seekg(0, std::ios::beg); // move the pointer back to the beginning
     for(Block block : blocks){
         archivefile.seekp(block.startPos());
         int i = 0;
-        while(filetoAdd.good() && i < 1024)
+        while(filetoAdd.peek() != EOF && i < 1024)
         {
             archivefile.put(filetoAdd.get());
             i++;
@@ -137,18 +136,24 @@ Archive& Archive::extract(std::string aFilename)
     FileEntry f=dir->getFileEntry(theFilename);
     std::ifstream archive(arcname, std::ifstream::binary);
     size_t fileSize = 0;
-    for(size_t blockIndex : f.blocks){ // for every block of this file
-        Block block(blockIndex);
-        archive.seekg(block.startPos()); // move the file pointer to the beigining of this block
+    for(int i = 0; i < f.blocks.size(); i++){ // for every block of this file
+        Block block(f.blocks[i]);
+        archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beigining of this block
         if(f.filetype == "txt"){ // it is a text file
-            char x[1];
-            int i = 0;
-            while(archive.peek() != EOF && fileSize < f.size && i < 1024)
-            {
-                archive.read(x,1);
+            if(i == Blocks.size()-1){
+                const size_t blockSize = f.size % 1024;
+                char* x = new char[blockSize+1];
+                memset(x, 0, blockSize+1);
+                archive.read(x,blockSize);
                 std::cout << x;
-                i++;
-                fileSize++;
+                delete[] x;
+            }
+            else{
+                char* x = new char[1025];
+                memset(x, 0, 1025);
+                archive.read(x,1024);
+                std::cout << x;
+                delete[] x;
             }
         }
         else{ // for printing the binary code in binary files
