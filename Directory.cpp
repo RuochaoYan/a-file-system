@@ -116,6 +116,12 @@ Directory& Directory::adjustBlockSize(){
         is.seekg((this->size)*1024);
         os.seekp((lastBlock+1)*1024);
         for(size_t i=0;i<1024;i++)  os.put(is.get());
+        for(std::map<std::string,FileEntry>::iterator it=this->files.begin(); it!=this->files.end(); ++it){
+            for(size_t i = 0; i < it->second.blocks.size(); ++i) {
+                if (it->second.blocks[i]==this->size) {it->second.blocks[i] = lastBlock+1; goto exit;}
+            }
+        }
+        exit:
         this->size += 1;
     }
     return *this;
