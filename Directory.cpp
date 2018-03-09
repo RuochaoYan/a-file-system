@@ -109,8 +109,11 @@ Directory& Directory::adjustBlockSize(){
     std::stringstream ss;
     ss << *this;
     ss.seekp(0, std::ios::end);
-    std::stringstream::pos_type offset = ss.tellp();
-    std::cout << "Dir Size: " << offset << std::endl;
+    std::stringstream::pos_type dirsize = ss.tellp();
+    /*if (dirsize >= this->size*Block.size){
+        std::ifstream if;
+        this->size;
+    }*/
     return *this;
 }
 
