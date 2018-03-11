@@ -26,7 +26,7 @@ Archive& Archive::defrag(){
         if (curBlock.num >= goalSize) continue;
             for(std::map<std::string,FileEntry>::iterator it=dir->getFileBegin(); it!=dir->getFileEnd(); ++it){
             for(size_t i = 0; i < it->second.blocks.size(); ++i) {
-                if (curBlock.num < it->second.blocks[i]) {
+                if (goalSize <= it->second.blocks[i]) {
                     is.seekg((it->second.blocks[i])*1024);
                     os.seekp((curBlock.num)*1024);
                     for(size_t i=0;i<1024;i++)  os.put(is.get());
