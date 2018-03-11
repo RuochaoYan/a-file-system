@@ -78,8 +78,8 @@ void memoryTests()
 }
 void Tester:: runTests()
 {
-  //  addDelTests();
-  //  extractTests();
-  performanceTests();
+    addDelTests();
+    extractTests();
+    performanceTests();
 
 }
