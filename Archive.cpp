@@ -43,6 +43,8 @@ Archive& Archive::defrag(){
         exit:
         []{}; //no op
     }
+    is.close();
+    os.close();
     truncate(arcname.c_str(),goalSize*1024); //Linux function
     return *this;
 }
@@ -176,7 +178,7 @@ Archive& Archive::extract(std::string aFilename)
     size_t fileSize = 0;
     for(size_t i = 0; i < f.blocks.size(); i++){ // for every block of this file
         Block block(f.blocks[i]);
-        archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beigining of this block
+        archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beginning of this block
         if(f.filetype == "txt"){ // it is a text file
             if(i == Blocks.size()-1){
                 const size_t blockSize = f.size % 1024;
