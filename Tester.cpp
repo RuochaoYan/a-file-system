@@ -82,7 +82,7 @@ void memoryTests()
 }
 void Tester:: runTests()
 {
-    //addDelTests();
+    addDelTests();
     //extractTests();
     performanceTests();
 
