@@ -45,7 +45,7 @@ struct Block;
       bool hasEmptyBlocks(){return !emptyblocks.empty();}
       size_t getAnEmptyBlock();
       size_t numEmptyBlocks() {return emptyblocks.size();}
-      void addAnEmptyBlock(size_t aBlock){emptyblocks.push(aBlock);}
+      void addAnEmptyBlock(size_t aBlock){emptyblocks.push_back(aBlock);}
       void deleteAFile(std::string filename);
       void listAllFiles();
       void listOneFile(std::string aFilename);
@@ -58,7 +58,7 @@ struct Block;
   protected:
     std::string arcname;
     std::map<std::string,FileEntry> files; //Maps filename to the corresponding FileEntry object
-    std::queue<size_t> emptyblocks; // a vector of empty block indices
+    std::deque<size_t> emptyblocks; // a vector of empty block indices
     size_t size; //size in blocks
     Directory& adjustBlockSize();
 

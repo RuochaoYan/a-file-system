@@ -68,7 +68,7 @@ Directory::Directory(const std::string aName, bool newArc):arcname(aName+".arc")
             std::cout << "Creating " + arcname << std::endl;
             std::ofstream archive(arcname);
             files = {};
-            emptyblocks = std::queue<size_t>();
+            emptyblocks = {};
             size = 1; //at least the first block is already occupied
             lastBlock = 0; // the first block
             }
@@ -83,7 +83,7 @@ Directory::Directory(const std::string aName, bool newArc):arcname(aName+".arc")
             } //first line: size of directory in blocks
             else if (i==1){ //second line: vector of empty blocks
                 std::stringstream ss(s);
-                while(getline(ss,s1,',')) emptyblocks.push(std::stoll(s1));
+                while(getline(ss,s1,',')) emptyblocks.push_back(std::stoll(s1));
                 i++;
             }
             else if("EOF"==s) break;
@@ -113,6 +113,9 @@ Directory& Directory::adjustBlockSize(){
     if (dirsize >= (this->size)*1024){
         std::ifstream is(arcname);
         std::fstream os(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
+        for(std::deque<size_t>::iterator it=this->emptyblocks.begin(); it!=this->emptyblocks.end(); it++){
+            if (*it == this->size) {emptyblocks.erase(it); goto exit;}
+        }
         is.seekg((this->size)*1024);
         os.seekp((lastBlock+1)*1024);
         for(size_t i=0;i<1024;i++)  os.put(is.get());
@@ -123,6 +126,10 @@ Directory& Directory::adjustBlockSize(){
         }
         exit:
         this->size += 1;
+    }
+    else if (dirsize < (this->size-1)*1024){
+        addAnEmptyBlock(this->size-1);
+        this->size -= 1;
     }
     return *this;
 }
@@ -141,7 +148,7 @@ Directory& Directory::extractFile(const std::string filename)
 
 size_t Directory::getAnEmptyBlock(){
     size_t res = emptyblocks.front();
-    emptyblocks.pop();
+    emptyblocks.pop_front();
     return res;
 }
 
@@ -151,6 +158,7 @@ void Directory::deleteAFile(std::string filename){
         addAnEmptyBlock(block);
     }
     files.erase(filename);
+    adjustBlockSize();
 }
 
 void Directory::listAllFiles(){
@@ -179,7 +187,7 @@ std::ostream& operator<<(std::ostream &os,Directory& aDir){
     for(size_t i = 0; !aDir.emptyblocks.empty(); ++i){
     if(i != 0) os << ",";
         os << aDir.emptyblocks.front();
-        aDir.emptyblocks.pop();
+        aDir.emptyblocks.pop_front();
     }
     os << '\n';
     for (std::map<std::string,FileEntry>::iterator it=aDir.files.begin(); it!=aDir.files.end(); ++it){
