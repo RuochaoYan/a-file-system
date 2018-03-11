@@ -1,5 +1,11 @@
 #include "Archive.hpp"
 #include <cstring>
+#include <unistd.h>
+#include <sys/types.h>
+
+       int truncate(const char *path, off_t length);
+       int ftruncate(int fd, off_t length);
+
 // discard the address, only maintain the name of the file e.g. "./testfiles/test1.txt" -> "test1.txt"
 std::string parseFilename(std::string aFileAddress){
     std::stringstream ss(aFileAddress);
@@ -24,7 +30,7 @@ Archive& Archive::defrag(){
     while(dir->hasEmptyBlocks()){
         Block curBlock = Block(dir->getAnEmptyBlock());
         if (curBlock.num >= goalSize) continue;
-            for(std::map<std::string,FileEntry>::iterator it=dir->getFileBegin(); it!=dir->getFileEnd(); ++it){
+            for(std::map<std::string,FileEntry>::iterator it=dir->getFileBegin(); it!=dir->getFileEnd(); ++it)
             for(size_t i = 0; i < it->second.blocks.size(); ++i) {
                 if (goalSize <= it->second.blocks[i]) {
                     is.seekg((it->second.blocks[i])*1024);
@@ -34,12 +40,12 @@ Archive& Archive::defrag(){
                     goto exit;
                 }
             }
-        }
         exit:
         []{}; //no op
     }
     os.seekp(0);
     os << *dir;
+    truncate(arcname.c_str(),goalSize);
     return *this;
 }
 
