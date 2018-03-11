@@ -45,7 +45,7 @@ Archive& Archive::defrag(){
     }
     os.seekp(0);
     os << *dir;
-    truncate(arcname.c_str(),goalSize);
+    truncate(arcname.c_str(),goalSize*1024);
     return *this;
 }
 
