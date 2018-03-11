@@ -45,7 +45,7 @@ void extractTests()
 }
 
 
-void performanceTests()
+/*void performanceTests()
 {
     std::cout<<"Performance Test 1. Deleting a small file stored after two large files"<<std::endl;
 
@@ -71,7 +71,7 @@ void performanceTests()
     std::cout<< "Performance Test1 has taken "<<std::chrono::duration_cast<std::chrono::microseconds>(end-start).count() << " microseconds to run."<<std::endl;
     std::cout<< "Performance Test2 has taken "<<std::chrono::duration_cast<std::chrono::microseconds>(end1-start1).count() << " microseconds to run."<<std::endl;
 }
-
+*/
 void memoryTests()
 {
 
@@ -80,6 +80,6 @@ void Tester:: runTests()
 {
     addDelTests();
     extractTests();
-    performanceTests();
+   // performanceTests();
 
 }
