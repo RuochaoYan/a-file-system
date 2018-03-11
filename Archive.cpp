@@ -57,8 +57,14 @@ Archive& Archive::add(std::string aFileAddress){
         return *this;
     }
 
-    std::vector<Block> blocks; //vector of block number
+
     std::ifstream filetoAdd(aFileAddress,std::ifstream::ate|std::ifstream::binary);
+    if(!filetoAdd.good()) {
+        std::cout << "Failed to add the file. The file you are trying to add does not exist" << std::endl;
+        return *this;
+    }
+
+    std::vector<Block> blocks; //vector of block number
     size_t fileSize=filetoAdd.tellg();
     size_t blocknum = fileSize/1024 + 1; //number of blocks needed
     std::cout << "Filesize:" << fileSize <<  "\nNumber of Blocks: " << blocknum << std::endl;
