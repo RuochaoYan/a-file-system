@@ -43,9 +43,7 @@ Archive& Archive::defrag(){
         exit:
         []{}; //no op
     }
-    os.seekp(0);
-    os << *dir;
-    truncate(arcname.c_str(),goalSize*1024);
+    truncate(arcname.c_str(),goalSize*1024); //Linux function
     return *this;
 }
 
@@ -100,6 +98,7 @@ Archive& Archive::del(std::string aFilename){
     std::string theFilename = parseFilename(aFilename);
     dir->deleteAFile(theFilename);
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
+    if (dir->lastBlock>(int)(0.75*dir->numEmptyBlocks())) this->defrag();
     archivefile << *dir;
     std::cout << "Successfully deleted!" << std::endl;
     return *this;
