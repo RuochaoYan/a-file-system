@@ -15,7 +15,8 @@ void Parser::parse(int argc, char *argv[]){
             "sfarchiver list (-l) [ARCHIVE_NAME] [FILE_NAME]: show detailed properties of the [FILE_NAME] in the [ARCHIVE_NAME]\n" <<
             "sfarchiver find [ARCHIVE_NAME] [STRING]: show detailed propertied of the file containing [STRING] in the [ARCHIVE_NAME]\n" <<
             "sfarchiver extract [ARCHIVE_NAME] [FILE_NAME]: extract [FILE_NAME] from the [ARCHIVE_NAME]\n" <<
-            "sfarchiver version (-v): Display the version of sfarchiver" << std::endl;
+            "sfarchiver version (-v): Display the version of sfarchiver\n"
+            "sfarchiver test: Run all tests in tester class" << std::endl;
     }
     else{
         std::string command = std::string(argv[1]);
