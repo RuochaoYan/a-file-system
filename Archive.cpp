@@ -101,12 +101,16 @@ Archive& Archive::add(std::string aFileAddress){
 }
 
 Archive& Archive::del(std::string aFilename){
-    std::string theFilename = parseFilename(aFilename);
-    dir->deleteAFile(theFilename);
-    std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
-    if (dir->lastBlock>(int)(0.75*dir->numEmptyBlocks())) this->defrag();
-    archivefile << *dir;
-    std::cout << "Successfully deleted!" << std::endl;
+    if(!dir->contains(aFilename)) {std::cerr<<"Cannot delete. File Does not exist"<<std::endl;} // check if file exists
+    else
+    {
+        std::string theFilename = parseFilename(aFilename);
+        dir->deleteAFile(theFilename);
+        std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
+        if (dir->lastBlock>(int)(0.75*dir->numEmptyBlocks())) this->defrag();
+        archivefile << *dir;
+        std::cout << "Successfully deleted!" << std::endl;
+    }
     return *this;
 }
 
