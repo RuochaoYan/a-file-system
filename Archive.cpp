@@ -53,14 +53,14 @@ Archive& Archive::add(std::string aFileAddress){
 
     // consider filename conflict
     if(dir->contains(theFilename)){
-        std::cout << "Failed to add the file. A file with the same name already exists." << std::endl;
+        std::cerr << "Failed to add the file. A file with the same name already exists." << std::endl;
         return *this;
     }
 
 
     std::ifstream filetoAdd(aFileAddress,std::ifstream::ate|std::ifstream::binary);
     if(!filetoAdd.good()) {
-        std::cout << "Failed to add the file. The file you are trying to add does not exist" << std::endl;
+        std::cerr << "Failed to add the file. The file you are trying to add does not exist" << std::endl;
         return *this;
     }
 
