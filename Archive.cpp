@@ -182,7 +182,7 @@ Archive& Archive::extract(std::string aFilename)
         Block block(f.blocks[i]);
         archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beigining of this block
         if(f.filetype == "txt"){ // it is a text file
-            if(i == Blocks.size()-1){
+            if(i == f.blocks.size()-1){
                 const size_t blockSize = f.size % 1024;
                 char* x = new char[blockSize+1];
                 memset(x, 0, blockSize+1);
