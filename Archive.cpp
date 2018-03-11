@@ -17,23 +17,33 @@ Archive::Archive(std::string aName, bool newArc): arcname(aName+".arc"){
     lastBlockIndex = dir->lastBlock;
 }
 
-Archive::defrag(){
+
+Archive::~Archive(){
+    if (dir->lastBlock>0.5*emptyblocks.size()) this->defrag();
+}
+
+Archive& Archive::defrag(){
     std::ifstream is(arcname);
     std::fstream os(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
     while(dir->hasEmptyBlocks()){
-        curBlock = Block(dir->getAnEmptyBlock())
-            for(std::map<std::string,FileEntry>::iterator it=dir->files.begin(); it!=dir->files.end(); ++it){
+        Block curBlock = Block(dir->getAnEmptyBlock());
+            for(std::map<std::string,FileEntry>::iterator it=dir->getFileBegin(); it!=dir->getFileEnd(); ++it){
             for(size_t i = 0; i < it->second.blocks.size(); ++i) {
                 if (curBlock.num < it->second.blocks[i]) {
-                    is.seekg((this->size)*1024);
-                    os.seekp((lastBlock+1)*1024);
+                    is.seekg((it->second.blocks[i])*1024);
+                    os.seekp((curBlock.num)*1024);
                     for(size_t i=0;i<1024;i++)  os.put(is.get());
+                    it->second.blocks[i] = curBlock.num;
                     goto exit;
                 }
             }
         }
         exit:
+        []{}; //no op
     }
+    os.seekp(0);
+    os << *dir;
+    return *this;
 }
 
 Archive& Archive::add(std::string aFileAddress){
@@ -156,7 +166,7 @@ Archive& Archive::extract(std::string aFilename)
     FileEntry f=dir->getFileEntry(theFilename);
     std::ifstream archive(arcname, std::ifstream::binary);
     size_t fileSize = 0;
-    for(int i = 0; i < f.blocks.size(); i++){ // for every block of this file
+    for(size_t i = 0; i < f.blocks.size(); i++){ // for every block of this file
         Block block(f.blocks[i]);
         archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beigining of this block
         if(f.filetype == "txt"){ // it is a text file

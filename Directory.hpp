@@ -36,6 +36,9 @@ struct Block;
 
     Directory& append(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks);
 
+    std::map<std::string,FileEntry>::iterator getFileBegin() {return files.begin();}
+    std::map<std::string,FileEntry>::iterator getFileEnd() {return files.end();}
+
     size_t getSize(){return size;}
     FileEntry getFileEntry(std::string filename){return files[filename];}
 
