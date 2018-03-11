@@ -44,6 +44,7 @@ struct Block;
 
       bool hasEmptyBlocks(){return !emptyblocks.empty();}
       size_t getAnEmptyBlock();
+      size_t numEmptyBlocks() {return emptyblocks.size();}
       void addAnEmptyBlock(size_t aBlock){emptyblocks.push(aBlock);}
       void deleteAFile(std::string filename);
       void listAllFiles();

@@ -15,7 +15,6 @@
 class Archive{
 public:
     Archive(std::string name, bool newArc = 0);
-    //~Archive(): might not need it yet.
     Archive& defrag();
     Archive& add(std::string filename);
     Archive& del(std::string filename);

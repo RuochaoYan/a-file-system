@@ -17,16 +17,13 @@ Archive::Archive(std::string aName, bool newArc): arcname(aName+".arc"){
     lastBlockIndex = dir->lastBlock;
 }
 
-
-Archive::~Archive(){
-    if (dir->lastBlock>0.5*emptyblocks.size()) this->defrag();
-}
-
 Archive& Archive::defrag(){
     std::ifstream is(arcname);
     std::fstream os(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
+    size_t goalSize = (dir->lastBlock + 1 - dir->numEmptyBlocks());
     while(dir->hasEmptyBlocks()){
         Block curBlock = Block(dir->getAnEmptyBlock());
+        if (curBlock.num >= goalSize) continue;
             for(std::map<std::string,FileEntry>::iterator it=dir->getFileBegin(); it!=dir->getFileEnd(); ++it){
             for(size_t i = 0; i < it->second.blocks.size(); ++i) {
                 if (curBlock.num < it->second.blocks[i]) {
