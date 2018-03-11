@@ -17,6 +17,25 @@ Archive::Archive(std::string aName, bool newArc): arcname(aName+".arc"){
     lastBlockIndex = dir->lastBlock;
 }
 
+Archive::defrag(){
+    std::ifstream is(arcname);
+    std::fstream os(arcname,std::fstream::binary | std::fstream::out | std::fstream::in);
+    while(dir->hasEmptyBlocks()){
+        curBlock = Block(dir->getAnEmptyBlock())
+            for(std::map<std::string,FileEntry>::iterator it=dir->files.begin(); it!=dir->files.end(); ++it){
+            for(size_t i = 0; i < it->second.blocks.size(); ++i) {
+                if (curBlock.num < it->second.blocks[i]) {
+                    is.seekg((this->size)*1024);
+                    os.seekp((lastBlock+1)*1024);
+                    for(size_t i=0;i<1024;i++)  os.put(is.get());
+                    goto exit;
+                }
+            }
+        }
+        exit:
+    }
+}
+
 Archive& Archive::add(std::string aFileAddress){
     std::cout << ("Adding file at " + aFileAddress + " to " + arcname) << std::endl;
     std::string theFilename = parseFilename(aFileAddress);
