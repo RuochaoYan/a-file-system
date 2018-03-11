@@ -37,3 +37,7 @@ Example:
 6. Show program version
 
 ./sfarchiver -v
+
+7. Run tests
+
+./sfarchiver test
