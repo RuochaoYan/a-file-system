@@ -44,6 +44,23 @@ void extractTests()
 
 }
 
+void mulAddDel()
+{
+  std::system("./sfarchiver add arc1 ./testfiles/test1.txt");
+  std::system("./sfarchiver add arc1 ./testfiles/test2.txt");
+  std::system("./sfarchiver add arc1 ./testfiles/test3.txt");
+  std::system("./sfarchiver add arc1 ./testfiles/jfk.txt");
+  std::system("./sfarchiver add arc1 ./testfiles/google.png");
+  std::system("./sfarchiver add arc1 ./testfiles/UCSD.png");
+  std::system("./sfarchiver del arc1 jfk.txt");
+  std::system("./sfarchiver del arc1 google.png");
+  std::system("./sfarchiver del arc1 UCSD.png");
+  std::system("./sfarchiver del arc1 test1.txt");
+  std::system("./sfarchiver del arc1 test2.txt");
+  std::system("./sfarchiver del arc1 test3.txt");
+
+}
+
 
 void performanceTests()
 {
@@ -76,14 +93,40 @@ void performanceTests()
     std::cout<< "Performance Test2 has taken "<<std::chrono::duration_cast<std::chrono::microseconds>(end1-start1).count() << " microseconds to run."<<std::endl;
 }
 
-void memoryTests()
+void listTests()
 {
+    std::system("./sfarchiver -l arc3");
+    std::system("./sfarchiver add arc3 ./testfiles/alice.txt");
+    std::system("./sfarchiver -l arc3");
+    std::system("./sfarchiver -l arc3 alice.txt");
 
 }
+
+
+
+void findTests()
+{
+    std::system("./sfarchiver add arc5 ./testfiles/twain.txt");
+    std::system("./sfarchiver add arc5 ./testfiles/alice.txt");
+    std::system("./sfarchiver find arc5 is");
+}
+
+void versionTest()
+{
+  std::system("./sfarchiver -v");
+}
+
+
 void Tester:: runTests()
 {
     addDelTests();
     //extractTests();
+    mulAddDel();
+    addDelTests();
+    extractTests();
     performanceTests();
+    listTests();
+  //  findTests();
+    versionTest();
 
 }
