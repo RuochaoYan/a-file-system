@@ -67,7 +67,7 @@ void performanceTests()
     std::system("./sfarchiver del arc1 twain.txt");
     std::system("./sfarchiver del arc1 verne.txt");
     auto end1 = std::chrono::system_clock::now();
-    std::cout<<"COmparing execution times"<<std::endl;
+    std::cout<<"Comparing execution times"<<std::endl;
     std::cout<< "Performance Test1 has taken "<<std::chrono::duration_cast<std::chrono::microseconds>(end-start).count() << " microseconds to run."<<std::endl;
     std::cout<< "Performance Test2 has taken "<<std::chrono::duration_cast<std::chrono::microseconds>(end1-start1).count() << " microseconds to run."<<std::endl;
 }
