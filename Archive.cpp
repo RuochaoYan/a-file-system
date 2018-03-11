@@ -1,5 +1,5 @@
 #include "Archive.hpp"
-
+#include <cstring>
 // discard the address, only maintain the name of the file e.g. "./testfiles/test1.txt" -> "test1.txt"
 std::string parseFilename(std::string aFileAddress){
     std::stringstream ss(aFileAddress);
@@ -111,6 +111,7 @@ Archive& Archive::list(std::string aFilename){
 Archive& Archive::find(std::string aString){
     // show properties of any textfile that contain the given string
     std::vector<FileEntry> textFiles = dir->getAllTextFiles();
+    aString.substr(1, aString.size()-2);
     for(FileEntry f : textFiles){
         findInOneFile(aString, f);
     }
