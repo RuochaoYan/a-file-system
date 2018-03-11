@@ -6,4 +6,4 @@ public:
     static void runTests();
 };
 
-#endif // PARSER_HPP_INCLUDED
+#endif // TESTER_HPP_INCLUDED
