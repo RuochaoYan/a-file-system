@@ -8,6 +8,7 @@
     size_t num;
     size_t size = 1024; // 1kByte blocks for now
 
+    friend bool operator<(const Block &lv, const Block &rv){return lv.num < rv.num;}
     size_t startPos() {return num*size;} //returns the position where the file needs to be written
     size_t endPos() {return startPos() + size;}
   };

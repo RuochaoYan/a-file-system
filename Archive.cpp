@@ -80,8 +80,10 @@ Archive& Archive::add(std::string aFileAddress){
             blocks.push_back(lastBlock);
         }
     }
-    std::cout << "First Block:" << blocks[0].num << std::endl;
+
     dir->append(theFilename,fileSize,blocks); //passing blocks to dir
+    blocks = (dir->getFileEntry(theFilename)).getBlocks();
+    std::cout << "First Block:" << blocks[0].num << std::endl;
 
     std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
 

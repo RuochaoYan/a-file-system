@@ -46,6 +46,13 @@ FileEntry::FileEntry(const std::string aLine){
     dateAdded = words[4];
 }
 
+std::vector<Block> FileEntry::getBlocks(){
+    std::vector<Block> output = {};
+    for(std::vector<size_t>::iterator it=blocks.begin(); it!=blocks.end(); it++){
+        output.push_back(Block(*it));
+    }
+    return output;
+}
 
 std::ostream& operator<<(std::ostream &os, const FileEntry& aF){
     os << aF.filename << ' ' << aF.filetype <<  ' '  << aF.size << ' ';
@@ -101,7 +108,9 @@ Directory::Directory(const std::string aName, bool newArc):arcname(aName+".arc")
 Directory& Directory::append(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks){
     FileEntry f = FileEntry(aFilename,aSize,aBlocks);
     files[f.filename] = f;
+    lastBlock = std::max(lastBlock, std::max_element(aBlocks.begin(),aBlocks.end())->num);
     this->adjustBlockSize();
+    std::cout << "Directory Block Size: " << this->size << std::endl;
     return *this;
 }
 

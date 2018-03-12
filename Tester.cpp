@@ -1,4 +1,4 @@
-#include"Tester.hpp"
+#include "Tester.hpp"
 
 void addDelTests()
 {
@@ -95,6 +95,7 @@ void performanceTests()
 
 void listTests()
 {
+    std::cout<<"List Tests"<<std::endl;
     std::system("./sfarchiver -l arc3");
     std::system("./sfarchiver add arc3 ./testfiles/alice.txt");
     std::system("./sfarchiver -l arc3");
@@ -106,6 +107,7 @@ void listTests()
 
 void findTests()
 {
+    std::cout<<"Find Tests"<<std::endl;
     std::system("./sfarchiver add arc5 ./testfiles/twain.txt");
     std::system("./sfarchiver add arc5 ./testfiles/alice.txt");
     std::system("./sfarchiver find arc5 is");
@@ -120,13 +122,13 @@ void versionTest()
 void Tester:: runTests()
 {
     addDelTests();
-    //extractTests();
+    extractTests();
     mulAddDel();
     addDelTests();
     extractTests();
     performanceTests();
     listTests();
-  //  findTests();
+    findTests();
     versionTest();
 
 }

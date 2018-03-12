@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
 
 struct Block;
 
@@ -21,6 +22,8 @@ struct Block;
         FileEntry();
         FileEntry(const std::string aFilename, const size_t aSize, const std::vector<Block> aBlocks);
         FileEntry(const std::string aLine);
+
+        std::vector<Block> getBlocks();
 
     };
 

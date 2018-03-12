@@ -1,7 +1,7 @@
 #include "Parser.hpp"
 
 Parser::Parser(){
-    commands = {"add","del","list","-l","find","extract","version","-v","test"};
+    commands = {"add","del","list","-l","find","extract","version","-v"};
 }
 
 void Parser::parse(int argc, char *argv[]){
