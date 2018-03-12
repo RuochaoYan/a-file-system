@@ -111,7 +111,7 @@ Archive& Archive::del(std::string aFilename){
         std::string theFilename = parseFilename(aFilename);
         dir->deleteAFile(theFilename);
         std::fstream archivefile(arcname,std::fstream::binary | std::fstream::out | std::fstream::in); // use fstream with "in" to avoid deleting the original contents
-        if (dir->lastBlock>(int)(0.75*dir->numEmptyBlocks())) this->defrag();
+        if (dir->lastBlock>(int)(0.9*dir->numEmptyBlocks())) this->defrag();
         archivefile << *dir;
         std::cout << "Successfully deleted!" << std::endl;
     }
@@ -181,7 +181,9 @@ Archive& Archive::extract(std::string aFilename)
     std::string content;
     FileEntry f=dir->getFileEntry(theFilename);
     std::ifstream archive(arcname, std::ifstream::binary);
-    size_t fileSize = 0;
+    std::ofstream os;
+    //size_t fileSize = 0;
+    if("txt" != f.filetype) os.open(f.filename,std::ofstream::binary);
     for(size_t i = 0; i < f.blocks.size(); i++){ // for every block of this file
         Block block(f.blocks[i]);
         archive.seekg(block.startPos(), std::ios::beg); // move the file pointer to the beginning of this block
@@ -203,7 +205,24 @@ Archive& Archive::extract(std::string aFilename)
             }
         }
         else{ // for printing the binary code in binary files
-            int i = 0;
+
+            if(i == f.blocks.size()-1){
+                const size_t blockSize = f.size % 1024;
+                char* x = new char[blockSize+1];
+                memset(x, 0, blockSize+1);
+                archive.read(x,blockSize);
+                os.write(x,blockSize);
+                delete[] x;
+                os.close();
+            }
+            else{
+                char* x = new char[1025];
+                memset(x, 0, 1025);
+                archive.read(x,1024);
+                os.write(x,1024);
+                delete[] x;
+            }
+            /*int i = 0;
             while(archive.peek() != EOF && i < 1024 && fileSize < f.size){ // print the contents in this block
                 int num = archive.get();
                 if(num < 16)
@@ -212,9 +231,10 @@ Archive& Archive::extract(std::string aFilename)
                 i++;
                fileSize++;
                 if(i % 2 == 0) std::cout << " " ;
-            }
+            }*/
         }
     }
-    std::cout << "" << std::endl;
+    if("txt" != f.filetype) std::cout << "File extracted" << std::endl;
+    else std::cout << "" << std::endl;
 	return *this;
 }
